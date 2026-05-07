@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>马克思主义基本原理题库</title>
+<title>马原随机抽查系统</title>
 
 <style>
 
@@ -12,51 +12,76 @@ body{
     margin:0;
     padding:20px;
     background:#f5f5f5;
-    font-family:"PingFang SC",sans-serif;
-    line-height:1.8;
+    font-family:"PingFang SC", Arial;
 }
 
 h1{
     text-align:center;
-    color:#c40000;
-    margin-bottom:30px;
+    color:#222;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
 }
 
 .card{
     background:white;
-    border-radius:18px;
-    padding:25px;
-    margin-bottom:25px;
+    border-radius:16px;
+    padding:30px;
+    margin-top:20px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-.question{
-    font-size:24px;
+#question{
+    font-size:28px;
     font-weight:bold;
-    color:#c40000;
-    margin-bottom:20px;
+    line-height:1.6;
+    color:#111;
 }
 
-.answer{
-    display:none;
+#answer{
+    margin-top:30px;
+    font-size:18px;
+    line-height:1.9;
     white-space:pre-wrap;
-    font-size:16px;
+    display:none;
     color:#333;
 }
 
-button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#c40000;
-    color:white;
-    font-size:17px;
-    margin-top:20px;
+.buttons{
+    margin-top:30px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
 }
 
-button:active{
-    opacity:0.85;
+button{
+    border:none;
+    padding:14px 24px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.random-btn{
+    background:#1677ff;
+    color:white;
+}
+
+.answer-btn{
+    background:#52c41a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.count{
+    margin-top:20px;
+    color:#666;
+    font-size:15px;
 }
 
 </style>
@@ -64,13 +89,33 @@ button:active{
 
 <body>
 
-<h1>马克思主义基本原理题库</h1>
+<div class="container">
 
-<div id="app"></div>
+<h1>📚 马原随机抽查系统</h1>
+
+<div class="card">
+
+<div id="question">
+点击下方按钮开始随机抽题
+</div>
+
+<div id="answer"></div>
+
+<div class="buttons">
+<button class="random-btn" onclick="nextQuestion()">🎲 随机抽题</button>
+
+<button class="answer-btn" onclick="showAnswer()">👀 显示答案</button>
+</div>
+
+<div class="count" id="count"></div>
+
+</div>
+
+</div>
 
 <script>
 
-const questionBank = [
+let questions = [
 
 {
 question:"考点1：马克思主义及马克思主义基本原理",
@@ -142,44 +187,34 @@ answer:`
 }
 
 ];
+let currentQuestion = null;
 
-const app = document.getElementById("app");
+function nextQuestion(){
 
-questionBank.forEach(item=>{
+    let randomIndex = Math.floor(Math.random() * questions.length);
 
-const card = document.createElement("div");
-card.className = "card";
+    currentQuestion = questions[randomIndex];
 
-card.innerHTML = `
-<div class="question">${item.question}</div>
+    document.getElementById("question").innerText =
+        currentQuestion.question;
 
-<div class="answer">
-${item.answer}
-</div>
+    document.getElementById("answer").style.display = "none";
 
-<button>显示答案</button>
-`;
-
-const btn = card.querySelector("button");
-const answer = card.querySelector(".answer");
-
-btn.onclick = ()=>{
-
-if(answer.style.display==="none" || answer.style.display===""){
-answer.style.display="block";
-btn.innerText="隐藏答案";
-}else{
-answer.style.display="none";
-btn.innerText="显示答案";
+    document.getElementById("count").innerText =
+        `当前题库数量：${questions.length} 题`;
 }
 
-};
+function showAnswer(){
 
-answer.style.display="none";
+    if(currentQuestion == null){
+        return;
+    }
 
-app.appendChild(card);
+    document.getElementById("answer").style.display = "block";
 
-});
+    document.getElementById("answer").innerText =
+        currentQuestion.answer;
+}
 
 </script>
 
